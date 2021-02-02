@@ -19,6 +19,7 @@ class UsersViewModel @ViewModelInject constructor(
     private var _usersList = MutableLiveData<List<User>>()
     var usersList: LiveData<List<User>> = _usersList
 
+
     fun getUsersList(offset: Int, limit: Int): LiveData<List<User>> {
         viewModelScope.launch(Dispatchers.IO) {
             _usersList.postValue(usersRepository.getUsers(offset, limit)!!.users)

@@ -7,14 +7,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.demotask.databinding.ListItemUserListingBinding
 import com.demotask.models.User
+import com.demotask.views.SpacesItemDecoration
 import kotlinx.android.synthetic.main.list_item_user_listing.view.*
 
 class UsersAdapter(var context: Context, var usersList: List<User>) :
     RecyclerView.Adapter<UsersAdapter.UsersViewHolder>() {
 
-    lateinit var gridLayoutManager: GridLayoutManager
     lateinit var imagesAdapter: ImagesAdapter
 
     override fun getItemCount(): Int = usersList.size
@@ -39,17 +40,21 @@ class UsersAdapter(var context: Context, var usersList: List<User>) :
         fun bindData(result: User) {
             imagesAdapter = ImagesAdapter(context, result.items!!)
             binding.userLayout.txtName.text = result.name
+            Glide.with(context).load(result.image).circleCrop().into(binding.userLayout.userImg)
             binding.rvImgs.apply {
-                gridLayoutManager = GridLayoutManager(context, 2)
-                if (result.items!!.size % 2 == 0) {
+                addItemDecoration(SpacesItemDecoration(2))
+                val gridLayoutManager =
+                    GridLayoutManager(context, 2, GridLayoutManager.VERTICAL, false)
+                //for even
+                if (result.items.size % 2 == 0) {
                     gridLayoutManager.spanSizeLookup = object :
                         GridLayoutManager.SpanSizeLookup() {
-                        override fun getSpanSize(position: Int): Int = 2
+                        override fun getSpanSize(position: Int): Int = 1
                     }
-                } else {
+                } else { //for odd
                     gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                         override fun getSpanSize(position: Int): Int =
-                            if (position % 2 == 0) 1 else 2
+                            if (position == 0) 2 else 1
                     }
                 }
 
