@@ -6,6 +6,8 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.demotask.adapter.UsersAdapter
 import com.demotask.databinding.ActivityMainBinding
 import com.demotask.models.User
 import com.demotask.utils.CheckInternet
@@ -27,6 +29,7 @@ class MainActivity : AppCompatActivity() {
     val usersViewModel: UsersViewModel by viewModels()
 
     //recycler adapter
+    lateinit var usersAdapter: UsersAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +44,8 @@ class MainActivity : AppCompatActivity() {
             rvUsersList.apply {
                 setHasFixedSize(true)
                 layoutManager = LinearLayoutManager(this@MainActivity)
-
+                usersAdapter = UsersAdapter(this@MainActivity, usersList)
+                adapter = usersAdapter
             }
         }
     }
@@ -49,11 +53,13 @@ class MainActivity : AppCompatActivity() {
     private fun getUsersData() {
         if (CheckInternet.isConnected(this)) {
             usersViewModel.getUsersList(currentOffset, currentLimit)
-                .observe(this, Observer { usersList ->
-                    if (usersList.isEmpty()) {
+                .observe(this, Observer { listData ->
+                    if (listData.isEmpty()) {
                         Log.d(TAG, "List is empty!")
                     } else {
-                        Log.d(TAG, "getUsersData: $usersList")
+                        Log.d(TAG, "getUsersData: $listData")
+                        usersList.addAll(listData)
+                        usersAdapter.notifyDataSetChanged()
                     }
                 })
         }

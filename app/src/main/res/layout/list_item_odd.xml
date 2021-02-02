@@ -1,6 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:orientation="vertical"
     android:layout_height="wrap_content">
 
-</RelativeLayout>
+    <include android:id="@+id/user_layout" layout="@layout/list_item_user" />
+
+    <com.demotask.views.SquareImageView
+        android:id="@+id/top_img"
+        android:layout_width="match_parent"
+        android:layout_height="300dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/top_img"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <com.demotask.views.SquareImageView
+            android:id="@+id/sec_img"
+            android:layout_width="0dp"
+            android:layout_height="300dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1" />
+
+        <com.demotask.views.SquareImageView
+            android:id="@+id/third_img"
+            android:layout_width="0dp"
+            android:layout_height="300dp"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+</LinearLayout>
